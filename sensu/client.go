@@ -30,6 +30,10 @@ func NewClient(transport Transport, cfg *Config) *Client {
 func (c *Client) buildProcessors() []Processor {
 	processors := []Processor{NewKeepAlive()}
 
+	for name, attr := range c.Config.StandaloneChecks() {
+		processors = append(processors, NewStandalone(name, attr))
+	}
+
 	for _, s := range c.Config.Subscriptions() {
 		processors = append(processors, NewSubscriber(s))
 	}

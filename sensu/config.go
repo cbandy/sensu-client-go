@@ -76,6 +76,20 @@ func (c *Config) Address() string {
 	return address
 }
 
+func (c *Config) StandaloneChecks() map[string]map[string]interface{} {
+	checks := map[string]map[string]interface{}{}
+
+	if ck, ok := c.config["checks"].(map[string]map[string]interface{}); ok {
+		for name, attr := range ck {
+			if t, ok := attr["standalone"]; ok && t.(bool) {
+				checks[name] = attr
+			}
+		}
+	}
+
+	return checks
+}
+
 func (c *Config) Subscriptions() []string {
 	subscriptions := []string{}
 
